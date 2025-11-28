@@ -75,4 +75,45 @@ describe("Site Validation Testing", () => {
       expect(isCorrectError).toBe(true);
     }
   });
+
+  it("should not allow a name larger than 100 chars", async () => {
+    const longName: string = Array(101).fill("a").join("");
+    const unboundNameInput = {
+      ...defaultInput,
+      siteName: longName,
+    };
+
+    const result = await CreateSiteInputSchema.safeParseAsync(unboundNameInput);
+
+    expect(result.success).toBe(false);
+
+    if (!result.success) {
+      const siteNameError = result.error.issues.find((issue) =>
+        issue.path.includes("siteName")
+      );
+      expect(siteNameError).toBeDefined();
+      expect(siteNameError?.message).toBe("");
+    }
+  });
+
+  it("should not allow an url longer thant 2048 chars", async () => {
+    const longDomain: string = Array(2048).fill("a").join("");
+    const longUrl: string = "https://" + longDomain + "usd21.org";
+    const unboundInput = {
+      ...defaultInput,
+      siteUrl: longUrl,
+    };
+
+    const result = await CreateSiteInputSchema.safeParseAsync(unboundInput);
+
+    expect(result.success).toBe(false);
+
+    if (!result.success) {
+      const siteUrlError = result.error.issues.find((issue) =>
+        issue.path.includes("siteUrl")
+      );
+      expect(siteUrlError).toBeDefined();
+      expect(siteUrlError?.message).toBe("");
+    }
+  });
 });
