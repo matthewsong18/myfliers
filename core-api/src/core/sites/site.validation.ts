@@ -35,8 +35,8 @@ const publicKeyValidation = z.string()
   });
 
 export const CreateSiteInputSchema: z.ZodType<CreateSiteInput> = z.object({
-  siteName: z.string(),
-  siteUrl: z.url(),
+  siteName: z.string().max(100),
+  siteUrl: z.url().max(2048),
   adminEmail: z.email(),
   publicKey: publicKeyValidation,
   adapterMetadata: z.record(z.string(), z.unknown()).optional(),

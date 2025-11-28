@@ -92,7 +92,9 @@ describe("Site Validation Testing", () => {
         issue.path.includes("siteName")
       );
       expect(siteNameError).toBeDefined();
-      expect(siteNameError?.message).toBe("");
+      expect(siteNameError?.message).toBe(
+        "Too big: expected string to have <=100 characters",
+      );
     }
   });
 
@@ -113,7 +115,9 @@ describe("Site Validation Testing", () => {
         issue.path.includes("siteUrl")
       );
       expect(siteUrlError).toBeDefined();
-      expect(siteUrlError?.message).toBe("");
+      expect(siteUrlError?.message).toBe(
+        "Too big: expected string to have <=2048 characters",
+      );
     }
   });
 });
