@@ -40,17 +40,16 @@ export const isEd25519Key = (pem: string): boolean => {
 };
 
 export const verifySignature = (
-  data: string | object,
+  data: string,
   signature: string,
   publicKeyPem: string,
 ): boolean => {
   try {
-    const payload = typeof data === "string" ? data : JSON.stringify(data);
     const key = createPublicKey(publicKeyPem);
 
     return verify(
       null,
-      Buffer.from(payload),
+      Buffer.from(data),
       key,
       Buffer.from(signature, "hex"),
     );
