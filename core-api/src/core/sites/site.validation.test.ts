@@ -98,7 +98,7 @@ describe("Site Validation Testing", () => {
     }
   });
 
-  it("should not allow an url longer thant 2048 chars", async () => {
+  it("should not allow an url longer than 2048 chars", async () => {
     const longDomain: string = Array(2048).fill("a").join("");
     const longUrl: string = "https://" + longDomain + "usd21.org";
     const unboundInput = {
@@ -117,6 +117,30 @@ describe("Site Validation Testing", () => {
       expect(siteUrlError).toBeDefined();
       expect(siteUrlError?.message).toBe(
         "Too big: expected string to have <=2048 characters",
+      );
+    }
+  });
+
+  it("should not allow an email longer than 254 characters", async () => {
+    const longEmailLocal = Array(254).fill("a").join("");
+    const longEmail = longEmailLocal + "@usd21.org";
+    const unboundInput = {
+      ...defaultInput,
+      adminEmail: longEmail,
+    };
+
+    const result = await CreateSiteInputSchema.safeParseAsync(unboundInput);
+
+    expect(result.success).toBe(false);
+
+    if (!result.success) {
+      const error = result.error.issues.find((issue) =>
+        issue.path.includes("adminEmail")
+      );
+
+      expect(error).toBeDefined();
+      expect(error?.message).toBe(
+        "Too big: expect string to have <= 254 characters",
       );
     }
   });
