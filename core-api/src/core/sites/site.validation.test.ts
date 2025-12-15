@@ -144,4 +144,26 @@ describe("Site Validation Testing", () => {
       );
     }
   });
+
+  it("should not allow a public key longer than 200 characters", async () => {
+    const unboundInput = {
+      ...defaultInput,
+      publicKey: Array(201).fill("a").join(""),
+    };
+
+    const result = await CreateSiteInputSchema.safeParseAsync(unboundInput);
+
+    expect(result.success).toBe(false);
+
+    if (!result.success) {
+      const error = result.error.issues.find((issue) =>
+        issue.path.includes("publicKey")
+      );
+
+      expect(error).toBeDefined();
+      expect(error?.message).toBe(
+        "Too big: expected string to have <=200 characters",
+      );
+    }
+  });
 });
