@@ -3,7 +3,7 @@ import { isEd25519Key, isParseablePublicKey } from "../common/crypto.ts";
 import { CreateSiteInput } from "./site.types.ts";
 import { SiteInputError } from "./site.error.ts";
 
-const publicKeyValidation = z.string()
+const publicKeyValidation = z.string().max(200)
   .superRefine((val, ctx) => {
     if (
       !val.startsWith("-----BEGIN PUBLIC KEY-----") ||
