@@ -45,4 +45,22 @@ describe("HTTP: POST /api/v1/sites", () => {
     expect(response.status).toBe(409);
     expect(response.body.error).toBe("SiteAlreadyExistsError");
   });
+
+  it("should return 413 Payload Too Large if request body exceeds 10kb", async () => {
+    const bloat = "x".repeat(1024 * 11);
+
+    const heavyPayload = {
+      ...defaultInput,
+      siteUrl: "https://a-fake-site.org",
+      adapterMetadata: {
+        uselessData: bloat,
+      },
+    };
+
+    const response = await request
+      .post("/api/v1/sites")
+      .send(heavyPayload);
+
+    expect(response.status).toBe(413);
+  });
 });
