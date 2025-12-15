@@ -140,7 +140,7 @@ describe("Site Validation Testing", () => {
 
       expect(error).toBeDefined();
       expect(error?.message).toBe(
-        "Too big: expect string to have <= 254 characters",
+        "Too big: expected string to have <=254 characters",
       );
     }
   });
