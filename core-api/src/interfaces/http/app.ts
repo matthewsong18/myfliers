@@ -4,7 +4,7 @@ import { globalErrorHandler } from "./middleware/error.middleware.ts";
 
 const app = express();
 
-app.use(express.json());
+app.use(express.json({ limit: "10kb" }));
 
 app.use("/api/v1/sites", siteRouter);
 

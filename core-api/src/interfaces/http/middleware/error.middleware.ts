@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
 import {
   SiteAlreadyExistsError,
@@ -6,8 +6,8 @@ import {
   SiteInputError,
 } from "../../../core/sites/site.error.ts";
 
-export const globalErrorHandler = (
-  err: Error,
+export const globalErrorHandler: ErrorRequestHandler = (
+  err,
   _req: Request,
   res: Response,
   _next: NextFunction,
@@ -19,6 +19,13 @@ export const globalErrorHandler = (
   if (err instanceof SiteError) {
     siteErrorHandler(err, res);
     return res;
+  }
+
+  if (err.status && err.status === 413) {
+    return res.status(413).json({
+      error: err.name,
+      message: err.message,
+    });
   }
 
   return res.status(500).json({
